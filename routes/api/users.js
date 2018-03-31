@@ -9,11 +9,11 @@ router.post('/users/signup', (req, res, next) => {
 
   user.username = req.body.user.username;
   user.email = req.body.user.email;
-  user.setPassword(req.body.user.password);
-
-  user.save().then(() => {
-    return res.json({ user: user.authenticatedJSON() });
-  }).catch(next);
+  user.setPassword(req.body.user.password).then(() => {
+    user.save().then(() => {
+      return res.json({ user: user.authenticatedJSON() });
+    }).catch(next);
+  });
 });
 
 router.post('/users/login', (req, res, next) => {
@@ -23,7 +23,6 @@ router.post('/users/login', (req, res, next) => {
 
   passport.authenticate('local', { session: false }, (err, user, info) => {
     if (err) {return next(err); }
-
     if (user) {
       return res.json({ user: user.authenticatedJSON() })
     } else {

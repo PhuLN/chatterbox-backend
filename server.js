@@ -1,5 +1,6 @@
 require('./config/index');
 require('./models/User');
+require('./config/passport');
 
 const express = require('express'),
       bodyParser = require('body-parser'),
@@ -12,8 +13,9 @@ let app = express();
 let server = require('http').createServer(app);
 let io = require('socket.io').listen(server);
 
-app.use(cors);
+
 app.use(bodyParser.json());
+app.use(cors());
 app.use(require('./routes'));
 
 io.on('connection', function(socket) {

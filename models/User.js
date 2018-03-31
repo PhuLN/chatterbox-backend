@@ -35,7 +35,7 @@ let UserSchema = new mongoose.Schema({
     type: String,
     default: 'https://cdn.discordapp.com/avatars/143067792957112320/653c0b2651682704d8f5d238124c4ac4.jpg?size=2048',
     validate: [{
-      validator: value => validator.isURL(value) && (value.endsWith('.jpg') || value.endsWith('.png')),
+      validator: value => validator.isURL(value),
       message: 'Provided URL is not a png or jpg image'
     }]
   },
@@ -47,9 +47,18 @@ let UserSchema = new mongoose.Schema({
   timestamps: true
 });
 
-UserSchema.method.setPassword = function (password) {
-  bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(password, salt, (err, hash) => this.passwordHash = hash);
+UserSchema.methods.setPassword = function (password) {
+  return new Promise((resolve, reject) => {
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(password, salt, (err, hash) => {
+        if (hash) {
+          this.passwordHash = hash;
+          resolve();
+        } else {
+          reject();
+        }
+      });
+    });
   });
 };
 
@@ -60,14 +69,15 @@ UserSchema.methods.validatePassword = function (password) {
 };
 
 UserSchema.methods.generateJWT = function () {
-  var expiry = new Date(new Date());
+  let today = new Date();
+  let expiry = new Date(today);
   expiry.setDate(today.getDate() + 30);
 
   return jwt.sign({
     id: this._id,
     username: this.username,
     expiry: parseInt(expiry.getTime() / 1000),
-  }, secret);
+  }, process.env.JWT_SECRET);
 };
 
 UserSchema.methods.authenticatedJSON = function () {
