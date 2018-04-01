@@ -31,7 +31,7 @@ router.post('/users/login', (req, res, next) => {
   })(req, res, next);
 });
 
-router.get('/users/test', (req, res, next) => {
+router.get('/users/test', auth.required, (req, res, next) => {
   return res.status(200).json({ message: 'Worked' });
 })
 

@@ -63,8 +63,14 @@ UserSchema.methods.setPassword = function (password) {
 };
 
 UserSchema.methods.validatePassword = function (password) {
-  bcrypt.compareSync(password, this.passwordHash, (err, res) => {
-    return res;
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(password, this.passwordHash, (err, res) => {
+      if (res) {
+        resolve(res);
+      } else {
+        reject();
+      }
+    });
   });
 };
 
