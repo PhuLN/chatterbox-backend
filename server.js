@@ -1,10 +1,12 @@
 require('./config/index');
 require('./models/User');
+require('./models/ChatRoom');
 require('./config/passport');
 
 const express = require('express'),
       bodyParser = require('body-parser'),
       cors = require('cors'),
+      socketio = require('socket.io'),
       passport = require('passport'),
       { mongoose } = require('./config/mongoose');
       port = process.env.PORT || 3000;
@@ -12,7 +14,7 @@ const express = require('express'),
 let app = express();
 let server = require('http').createServer(app);
 let io = require('socket.io').listen(server);
-
+app.io = io;
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -24,8 +26,10 @@ io.on('connection', function(socket) {
   socket.on('disconnect', () => {
     console.log('User disconnected');
   });
-})
+});
 
 server.listen(port, () => {
   console.log(`Chat server has been started on port ${server.address().port}`);
-})
+});
+
+module.exports = { app }

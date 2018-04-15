@@ -1,7 +1,6 @@
 const jwt = require('express-jwt');
 
 function getTokenFromHeader(req){
-  console.log(req.headers);
   if (req.headers.token) {
     return req.headers.token;
   }

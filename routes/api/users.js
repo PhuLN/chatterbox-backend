@@ -9,6 +9,7 @@ router.post('/users/signup', (req, res, next) => {
 
   user.username = req.body.user.username;
   user.email = req.body.user.email;
+
   user.setPassword(req.body.user.password).then(() => {
     user.save().then(() => {
       return res.json({ user: user.authenticatedJSON() });
@@ -31,8 +32,8 @@ router.post('/users/login', (req, res, next) => {
   })(req, res, next);
 });
 
-router.get('/users/test', auth.required, (req, res, next) => {
-  return res.status(200).json({ message: 'Worked' });
-})
+router.get('/test', auth.required, (req, res, next) => {
+  return res.status(200).json({ message: 'Required auth: Worked' });
+});
 
 module.exports = router;

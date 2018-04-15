@@ -41,7 +41,7 @@ let UserSchema = new mongoose.Schema({
   },
   chatrooms: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'chatroom'
+    ref: 'ChatRoom'
   }]
 }, {
   timestamps: true
