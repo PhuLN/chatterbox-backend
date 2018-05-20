@@ -14,19 +14,27 @@ const express = require('express'),
 let app = express();
 let server = require('http').createServer(app);
 let io = require('socket.io').listen(server);
-app.io = io;
 
 app.use(bodyParser.json());
 app.use(cors());
 app.use(require('./routes'));
 
-io.on('connection', function(socket) {
+
+
+io.on('connection', (socket) => {
+  app.set('user', socket);
   console.log('User connected');
 
   socket.on('disconnect', () => {
     console.log('User disconnected');
   });
+
+  socket.on('test1', (thing) => {
+    io.emit("test1", "test1")
+  });
 });
+
+app.set("socket", io);
 
 server.listen(port, () => {
   console.log(`Chat server has been started on port ${server.address().port}`);
