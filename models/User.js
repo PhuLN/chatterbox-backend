@@ -39,10 +39,6 @@ let UserSchema = new mongoose.Schema({
       message: 'Provided URL is not a png or jpg image'
     }]
   },
-  chatrooms: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'ChatRoom'
-  }]
 }, {
   timestamps: true
 });
