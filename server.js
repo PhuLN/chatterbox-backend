@@ -27,8 +27,14 @@ io.on('connection', (socket) => {
     console.log('User disconnected');
   });
 
-  socket.on('attemptJoinServer', (chatId) => {
-    socket.join(chatId);
+  socket.on('attemptJoinChat', (chat) => {
+    Object.keys(socket.rooms).forEach((room) => {
+      socket.leave(room);
+    })
+    socket.join(chat, () => {
+      console.log(socket.rooms);
+    });
+    
   });
 });
 
