@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-let ChatRoomSchema = new mongoose.Schema({
+let MessageSchema = new mongoose.Schema({
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   inGroup: { type: mongoose.Schema.Types.ObjectId, ref: 'ChatRoom' },
   message: {
@@ -13,4 +13,4 @@ let ChatRoomSchema = new mongoose.Schema({
   timestamps: true
 });
 
-mongoose.model('ChatRoom', ChatRoomSchema);
+mongoose.model('Message', MessageSchema);
