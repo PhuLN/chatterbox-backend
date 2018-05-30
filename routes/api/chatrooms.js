@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const router = require('express').Router();
 const { ObjectId } = require('mongodb');
+const _ = require('lodash');
 
 const ChatRoom = mongoose.model('ChatRoom');
 const User = mongoose.model('User');
@@ -38,5 +39,15 @@ router.get('/yourchats', auth.required, (req, res, next) => {
   });
 });
 
+router.get('/chatmembers', auth.required, (req, res, next) => {
+  User.findById(req.payload.id).then((user) => {
+    if (!user) { return res.sendStatus(401); }
+
+    ChatRoom.findById(req.query.chatId).populate('members').then((chat) => {
+      const { members } = _.pick(chat, ['members']);
+      return res.status(200).send(_.map(members , member => _.pick(member, ['_id', 'username', 'profileImage'])));
+    });
+  });
+});
 
 module.exports = router;

@@ -1,6 +1,7 @@
 require('./config/index');
 require('./models/User');
 require('./models/ChatRoom');
+require('./models/Message');
 require('./config/passport');
 
 const express = require('express'),
@@ -27,9 +28,18 @@ io.on('connection', (socket) => {
     console.log('User disconnected');
   });
 
-  socket.on('attemptJoinServer', (chatId) => {
-    socket.join(chatId);
+  socket.on('attemptJoinChat', (chat) => {
+    Object.keys(socket.rooms).forEach((room) => {
+      socket.leave(room);
+    });
+    socket.join(chat, () => {
+      //
+    });
   });
+
+  socket.on('sendMessage', (message) => {
+    io.to(Object.keys(socket.rooms)[0]).emit('newMessage', message);
+  })
 });
 
 server.listen(port, () => {
