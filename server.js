@@ -33,7 +33,7 @@ io.on('connection', (socket) => {
       socket.leave(room);
     });
     socket.join(chat, () => {
-      console.log(socket.rooms);
+      //
     });
   });
 
