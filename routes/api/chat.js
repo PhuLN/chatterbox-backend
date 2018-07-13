@@ -10,7 +10,7 @@ const auth = require('../auth');
 
 router.post('/create', auth.required, (req, res, next) => {
   const messageDetails = req.body.message;
-
+  
   User.findById(req.payload.id).then((user) => {
     if (!user) { return res.status(401); }
     

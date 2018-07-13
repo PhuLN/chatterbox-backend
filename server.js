@@ -2,6 +2,7 @@ require('./config/index');
 require('./models/User');
 require('./models/ChatRoom');
 require('./models/Message');
+require('./models/InviteCode');
 require('./config/passport');
 
 const express = require('express'),
@@ -31,13 +32,16 @@ io.on('connection', (socket) => {
   socket.on('attemptJoinChat', (chat) => {
     Object.keys(socket.rooms).forEach((room) => {
       socket.leave(room);
+      console.log(`Left room ${room}`);
     });
     socket.join(chat, () => {
-      //
+      io.to(chat).emit('newUserJoined');
+      console.log(`Joined room ${chat}`);
     });
   });
 
   socket.on('sendMessage', (message) => {
+    console.log(message);
     io.to(Object.keys(socket.rooms)[0]).emit('newMessage', message);
   })
 });

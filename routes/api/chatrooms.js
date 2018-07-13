@@ -24,6 +24,8 @@ router.post('/create', auth.required, (req, res, next) => {
     chat.members.push(user);
 
     return chat.save().then((chat) => {
+      let filter = _.map(chat.members , member => _.pick(member, ['_id', 'username', 'profileImage']))
+      chat.members = filter;
       res.send(chat);
     });
   });
@@ -35,6 +37,17 @@ router.get('/yourchats', auth.required, (req, res, next) => {
 
     ChatRoom.find({ members: user._id }).then((chats) => {
       return res.status(200).send(chats);
+    });
+  });
+});
+
+router.get('/chat', auth.required, (req, res, next) => {
+  User.findById(req.payload.id).then((user) => {
+    if (!user) { return res.sendStatus(401); }
+
+    ChatRoom.findById(req.query.chatId).then((chat) => {
+      if (!chat) { return res.status(401); }
+      return res.status(200).send(chat);
     });
   });
 });

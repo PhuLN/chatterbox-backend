@@ -31,7 +31,8 @@ let ChatRoomSchema = new mongoose.Schema({
     ref: 'User'
   }]
 }, {
-  timestamps: true
+  usePushEach: true,
+  timestamps: true,
 });
 
 mongoose.model('ChatRoom', ChatRoomSchema);

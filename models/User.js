@@ -40,7 +40,8 @@ let UserSchema = new mongoose.Schema({
     }]
   },
 }, {
-  timestamps: true
+  usePushEach: true,
+  timestamps: true,
 });
 
 UserSchema.methods.setPassword = function (password) {

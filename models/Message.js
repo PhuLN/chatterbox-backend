@@ -8,9 +8,9 @@ let MessageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  
 }, {
-  timestamps: true
+  usePushEach: true,
+  timestamps: true,
 });
 
 mongoose.model('Message', MessageSchema);
