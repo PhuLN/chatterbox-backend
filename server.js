@@ -18,7 +18,11 @@ let server = require('http').createServer(app);
 let io = require('socket.io').listen(server);
 
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  exposedHeaders: ['Token', 'token', 'Content-Type'],
+  credentials: true,
+}));
 app.use(require('./routes'));
 
 io.on('connection', (socket) => {
